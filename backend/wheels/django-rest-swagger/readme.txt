@@ -1,0 +1,1 @@
+This index.html must be in "/usr/local/lib/python3.9/site-packages/rest_framework_swagger/templates/rest_framework_swagger" directory.

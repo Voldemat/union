@@ -1,0 +1,36 @@
+version: '1'
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+
+    volumes: 
+      - .:/app
+
+    ports:
+      - "8000:8000"
+
+    environment:
+      - "DEBUG=1"
+      - "SECRET_KEY=django-insecure-6&ac#p@km0q$$to%w9_9#en1p5sggut!r+$$z#l-+o*!-12ny*6@"
+      - "POSTGRES_USER=f276b4d26b00b2bee1bd3df7bf15798d"
+      - "POSTGRES_PASSWORD=92ac9a16a6224ae587ef263c90fa6f5c"
+      - "PRODUCTION=0"
+
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:13
+    environment:
+      - "POSTGRES_USER=f276b4d26b00b2bee1bd3df7bf15798d"
+      - "POSTGRES_PASSWORD=92ac9a16a6224ae587ef263c90fa6f5c"
+
+    volumes:
+      - "postgres_data:/var/lib/postgresql/data"
+  redis:
+    image: redis:6.2.3
+
+volumes:
+  postgres_data:
