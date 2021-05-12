@@ -18,7 +18,7 @@ class Redis(redis.StrictRedis):
 
         try:
             # get value from redis and decode it
-            value = super(self).get(name).decode('UTF-8')
+            value = super().get(name).decode('UTF-8')
         except AttributeError:
             # if value does not exist return None
             return None
@@ -45,7 +45,7 @@ class Redis(redis.StrictRedis):
             del kwargs['prefix']
             
         # call parent set method with additional kwargs
-        super(self).set(name, value, **kwargs)
+        super().set(name, value, **kwargs)
 
     def get_all(self, prefix:str, *args:list, **kwargs:dict) -> Optional[list]:
         all_obj:list[str] = list(self.scan_iter(f'{prefix}:*'))

@@ -15,12 +15,14 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = int(os.environ.get("DEBUG"))
 
 PRODUCTION = bool(int(os.environ.get('PRODUCTION'))) # "0" -> 0 -> False
+                                                     # "1" -> 1 -> True
 
 ALLOWED_HOSTS = []
 
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -34,11 +36,15 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'rest_framework_swagger',
+    'channels_redis',
+    
 
     # local apps
     'users.apps.UsersConfig',
     'cache.apps.CacheConfig',
     'modules.apps.ModulesConfig',
+    'api_v1.apps.ApiV1Config',
+    'chats.apps.ChatsConfig',
 
 ]
 
@@ -47,6 +53,7 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES':[
         'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES':[
@@ -71,10 +78,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'core.urls'
 
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,6 +97,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'core.wsgi.application'
+ASGI_APPLICATION = 'core.asgi.application'
 
 
 # Database
@@ -110,6 +120,16 @@ AUTH_USER_MODEL = 'users.User'
 # REDIS SETTINGS
 REDIS_HOST = 'redis'
 REDIS_PORT = 6379
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [(REDIS_HOST, REDIS_PORT)],
+        },
+    },
+}
 
 
 # Password validation

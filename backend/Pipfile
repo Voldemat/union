@@ -13,6 +13,8 @@ Django = "==3.2"
 Pillow = "==8.2"
 django-cors-headers = "==3.7.0"
 django-heroku = "*"
+channels = "==3.0.3"
+channels-redis = "==3.2.0"
 
 [dev-packages]
 

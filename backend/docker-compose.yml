@@ -4,6 +4,7 @@ services:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
 
+    container_name: web
     volumes: 
       - .:/app
 
@@ -23,6 +24,7 @@ services:
 
   db:
     image: postgres:13
+    container_name: db
     environment:
       - "POSTGRES_USER=postgres"
       - "POSTGRES_PASSWORD=postgres"
@@ -30,6 +32,7 @@ services:
     volumes:
       - "postgres_data:/var/lib/postgresql/data"
   redis:
+    container_name: redis
     image: redis:6.2.3
 
 volumes:
