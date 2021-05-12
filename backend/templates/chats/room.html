@@ -26,6 +26,12 @@
         };
 
         chatSocket.onclose = function(e) {
+            try{
+                console.log(JSON.parse(e.data))
+            }
+            catch(e){
+                console.log(e.data)
+            }
             console.error('Chat socket closed unexpectedly');
         };
 
