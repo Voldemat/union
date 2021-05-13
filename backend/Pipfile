@@ -7,7 +7,6 @@ name = "pypi"
 django-grappelli = "==2.15.1"
 psycopg2-binary = "==2.8.6"
 django-rest-framework = "==0.1.0"
-django-rest-swagger = "==2.2.0"
 redis = "==3.5.3"
 Django = "==3.2"
 Pillow = "==8.2"
@@ -15,6 +14,7 @@ django-cors-headers = "==3.7.0"
 django-heroku = "*"
 channels = "==3.0.3"
 channels-redis = "==3.2.0"
+rest-swagger = "==1.0.0"
 
 [dev-packages]
 

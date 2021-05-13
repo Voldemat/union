@@ -31,11 +31,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # 3rd-party
+    # 3rd-party:
+
+    # api
     'rest_framework',
     'rest_framework.authtoken',
+
+    # communication with frontend
     'corsheaders',
-    'rest_framework_swagger',
+
+    # api auto docs
+    'rest_swagger',
+
+    # channels layers requirement
     'channels_redis',
     
 

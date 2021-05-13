@@ -17,25 +17,48 @@ logger.addHandler(handler)
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
-    def _send_state(self):
-        all_method = self.chat.messages.all
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-        messages = all_method()
+        """Converting async and sync functions"""
+        # define chat get_instance methods
+        self.sync_chat_get = Chat.objects.get
+        self.async_chat_get = sync_to_async(self.sync_chat_get)
+
+        # define messages create method 
+        self.sync_message_create = Message.objects.create
+        self.async_message_create = sync_to_async(self.sync_message_create)
+
+        # convert send method from async to sync
+        self.sync_send = async_to_sync(self.send)
+
+        # convert "send initial state" method
+        self.async_send_state = sync_to_async(self._send_state)
+
+
+    def _get_chat(self):
+        return self.chat
+
+    def _send_state(self) -> None:
+        # check self.chat instance
+        assert self.chat, 'self.chat is not defined!'
+        # get all messages in current chat
+        messages:list[Message] = self.chat.messages.all()
 
         logger.debug(str(messages))
 
-        json_object = MessageSerializer(messages, many = True).data
+        # parse messages throw serializer into json
+        json_object:list[dict] = MessageSerializer(messages, many = True).data
 
-        send = async_to_sync(self.send)
-        send(text_data = json.dumps(json_object))
+        # send serialized messages - initial state
+        self.sync_send(text_data = json.dumps(json_object))
 
-    def _get_room_group_name(self, room_name):
-        return f'chat_{room_name}'
+        return None
 
-    async def _get_chat_model(self, id:str, *args, **kwargs):
-        get_instance = sync_to_async(Chat.objects.get)
+
+    async def _get_chat_model(self, id:str, *args:list, **kwargs:dict):
         try:
-            instance = await get_instance(id = id)
+            instance = await self.async_chat_get(id = id)
         except Chat.DoesNotExist:
             message = {
                 "message":"Chat instance DoesNotExist!"
@@ -46,38 +69,36 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return instance
 
     async def connect(self):
-        url_kwargs = self.scope['url_route']['kwargs']
-        chat_id = url_kwargs['chat_id']
+        # get chat id from url
+        chat_id = self.scope['url_route']['kwargs']['chat_id']
 
+        # get chat instance 
         self.chat = await self._get_chat_model(id = chat_id)
 
-        self.room_group_name = self._get_room_group_name(chat_id)
+        # generate room group name from chat id
+        self.room_group_name = f'chat_{chat_id}'
 
+        # add user to self object to use it in other functions
         self.user = self.scope['user']
-        # # if not user close websocket
+
+        # if user not logged in close websocket
         # if user.is_anonymous:
-        #     logger.info('websocket close')
+        #     logger.info('User isn`t logged in')
         #     await super().close(json.dumps({
         #         "message":"User must be authenticated"}))
-        #     return
 
-        # logger.debug(user)
-        
-
-        logger.debug('Room group name: ' + self.room_group_name)
-
+        # add chat to channel layer
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
         )
 
+        # accepting websocket connection && switching protocol HTTP 101
         await self.accept()
 
 
-        logger.info('Websocket accept')
-
-        self._send_state = sync_to_async(self._send_state)
-        await self._send_state()
+        # send initial state (later messages)
+        await self.async_send_state()
 
         
 
@@ -93,10 +114,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         data = json.loads(text_data)
         text = data['message']
 
-
-
-        create_method = sync_to_async(Message.objects.create)
-        message_instance = await create_method(
+        message_instance = await self.async_message_create(
             writer = self.user,
             text = text,
             chat = self.chat

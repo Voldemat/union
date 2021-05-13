@@ -1,7 +1,8 @@
-version: '1'
+version: '3.8'
 services:
   web:
     build: .
+    image: union_backend_web
     command: python manage.py runserver 0.0.0.0:8000
 
     container_name: web
