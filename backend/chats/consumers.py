@@ -36,12 +36,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.async_send_state = sync_to_async(self._send_state)
 
 
-    def _get_chat(self):
-        return self.chat
-
     def _send_state(self) -> None:
-        # check self.chat instance
-        assert self.chat, 'self.chat is not defined!'
         # get all messages in current chat
         messages:list[Message] = self.chat.messages.all()
 
@@ -78,14 +73,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # generate room group name from chat id
         self.room_group_name = f'chat_{chat_id}'
 
-        # add user to self object to use it in other functions
-        self.user = self.scope['user']
 
-        # if user not logged in close websocket
-        # if user.is_anonymous:
-        #     logger.info('User isn`t logged in')
-        #     await super().close(json.dumps({
-        #         "message":"User must be authenticated"}))
 
         # add chat to channel layer
         await self.channel_layer.group_add(
@@ -115,7 +103,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         text = data['message']
 
         message_instance = await self.async_message_create(
-            writer = self.user,
+            writer = self.scope['user'],
             text = text,
             chat = self.chat
         )

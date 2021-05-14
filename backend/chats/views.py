@@ -7,9 +7,12 @@ def index(request):
     return render(request, 'chats/index.html')
 
 def chat(request, id):
-    if not request.user.is_authenticated:
+    try:
+        instance = Chat.objects.get(id = id)
+    except Chat.DoesNotExist:
         raise Http404
-    instance = Chat.objects.get_or_create(id = id, users = request.user.id)[0]
-    return render(request, 'chats/room.html', {
-        'chat_id': str(instance.id)
-    })
+
+    else:
+        return render(request, 'chats/room.html', {
+            'chat_id': str(instance.id)
+        })

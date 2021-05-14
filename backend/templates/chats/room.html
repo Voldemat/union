@@ -22,7 +22,6 @@
 
         chatSocket.onmessage = function(e) {
             let data = JSON.parse(e.data);
-            console.log(data)
 
   
             if (!Array.isArray(data)){
@@ -31,20 +30,17 @@
             else{
                 data = Object.values(data)
                 data.forEach(message => {
-                    console.log(message)
                     document.querySelector('#chat-log').value += (message.text + '\n');
                 })
             }
         };
+        chatSocket.onerror = function(e){
+            console.log('onerror')
+            console.log(e)
+        }
 
         chatSocket.onclose = function(e) {
-            try{
-                console.log(JSON.parse(e.data))
-            }
-            catch(e){
-                console.log(e.data)
-            }
-            console.error('Chat socket closed unexpectedly');
+            console.log('Websocket close')
         };
 
         document.querySelector('#chat-message-input').focus();
