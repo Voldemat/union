@@ -7,6 +7,7 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
+from chats.models import Chat
 
 class UserManager(BaseUserManager):
     def create_user(self, email:str = None, first_name:str = None, last_name:str = None, birth_date:str = None, avatar:object = None, about_me:str = None, password:str = None):
@@ -84,8 +85,10 @@ class User(AbstractBaseUser, models.Model):
     def __str__(self):
         return self.email
 
+    def get_chats(self):
+        pass
 
-    def has_perm(self, perm, obj=None):
+    def has_perm(self, perm, obj = None):
         # "Does the user have a specific permission?"
         # Simplest possible answer: Yes, always
         return True

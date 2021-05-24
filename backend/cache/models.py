@@ -78,7 +78,6 @@ class Redis(redis.StrictRedis):
 
         redis_value = self.get(name = name)
 
-        print(redis_value)
         datalist:list[dict] = str_to_json( redis_value )
 
         return datalist # list of json objects
