@@ -1,6 +1,7 @@
 import json
 import logging
 
+from rest_framework.authtoken.models import Token
 from asgiref.sync import sync_to_async, async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.exceptions import StopConsumer
@@ -24,6 +25,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # define chat get_instance methods
         self.sync_chat_get = Chat.objects.get
         self.async_chat_get = sync_to_async(self.sync_chat_get)
+
+        self.sync_token_get = Token.objects.get 
+        self.async_token_get = sync_to_async(Token.objects.get) 
 
         # define messages create method 
         self.sync_message_create = Message.objects.create
@@ -98,13 +102,25 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
         await super().close(close_code)
 
+
+    def get_user(self, token):
+        try:
+            user = self.sync_token_get(key = token).user
+            
+        except Token.DoesNotExist:
+            self.send(json.dumps({
+                "error":"wrong user token"
+            }))
+        return user
     async def receive(self, text_data):
         data = json.loads(text_data)
-        text = data['message']
 
+        get_user = sync_to_async(self.get_user)
+        user = await get_user(token = data['token'])
+        print(user)
         message_instance = await self.async_message_create(
-            writer = self.scope['user'],
-            text = text,
+            writer = user,
+            text = data['message'],
             chat = self.chat
         )
 
@@ -124,3 +140,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
         logger.debug(message)
 
         await self.send(text_data = json.dumps(message))
+
