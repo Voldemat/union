@@ -86,7 +86,9 @@ class User(AbstractBaseUser, models.Model):
         return self.email
 
     def get_chats(self):
-        pass
+        chats:list = Chat.objects.filter(users__id = str(self.id))
+        print(chats)
+        return chats
 
     def has_perm(self, perm, obj = None):
         # "Does the user have a specific permission?"

@@ -2,6 +2,7 @@ import uuid
 
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.conf import settings
 # Create your models here.
 
 class Message(models.Model):
@@ -12,7 +13,7 @@ class Message(models.Model):
         editable    = False
     )
     text = models.CharField(max_length = 500, null = True, blank = True)
-    writer = models.ForeignKey( get_user_model(), on_delete = models.PROTECT )
+    writer = models.ForeignKey( settings.AUTH_USER_MODEL , on_delete = models.PROTECT )
 
     created_at = models.DateTimeField(auto_now_add = True, editable = False)
 
@@ -29,7 +30,8 @@ class Chat(models.Model):
         editable    = False
     )
 
-    users = models.ManyToManyField(  get_user_model() )
+    name = models.CharField(max_length = 50, default = '')
+    users = models.ManyToManyField(  settings.AUTH_USER_MODEL )
 
 
     def __str__(self):

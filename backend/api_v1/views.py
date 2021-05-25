@@ -25,7 +25,7 @@ class UserViewSet(ModelViewSetRedis):
 
 class ChatViewSet(ModelViewSetRedis):
     def get_queryset(self):
-        queryset:QueryDict = self.request.user.chats.all()
+        queryset:QueryDict = self.request.user.get_chats()
 
         return queryset
     serializer_class = ChatSerializer
