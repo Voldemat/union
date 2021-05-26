@@ -26,13 +26,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.sync_chat_get = Chat.objects.get
         self.async_chat_get = sync_to_async(self.sync_chat_get)
 
-        self.sync_token_get = Token.objects.get 
-        self.async_token_get = sync_to_async(Token.objects.get) 
-
         # define messages create method 
         self.sync_message_create = Message.objects.create
         self.async_message_create = sync_to_async(self.sync_message_create)
 
+
+        self.async_get_user:callable = sync_to_async(self.sync_get_user)
         # convert send method from async to sync
         self.sync_send = async_to_sync(self.send)
 
@@ -103,20 +102,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await super().close(close_code)
 
 
-    def get_user(self, token):
+    def sync_get_user(self, token:str):
         try:
-            user = self.sync_token_get(key = token).user
+            user:object = Token.objects.get(key = token).user
             
         except Token.DoesNotExist:
             self.send(json.dumps({
                 "error":"wrong user token"
             }))
         return user
-    async def receive(self, text_data):
-        data = json.loads(text_data)
+    async def receive(self, text_data:str):
+        data:dict = json.loads(text_data)
 
-        get_user = sync_to_async(self.get_user)
-        user = await get_user(token = data['token'])
+        user = await self.async_get_user(token = data['token'])
         print(user)
         message_instance = await self.async_message_create(
             writer = user,
