@@ -56,4 +56,4 @@ class TokenAuthentication(ObtainAuthToken):
         created:bool
         token, created = Token.objects.get_or_create(user = user)
 
-        return Response( { 'token':token.key }, status = 201 if created else 200)
+        return Response( { 'token':token.key, 'email': str(user.email) }, status = 201 if created else 200)
