@@ -4,9 +4,10 @@ from rest_framework.serializers import (
 )
 
 from chats.models import Message, Chat
+from users.serializers import UserSerializer
 
 class MessageSerializer(ModelSerializer):
-    writer = StringRelatedField()
+    writer = UserSerializer(many = False)
     class Meta:
         model = Message
         fields = [

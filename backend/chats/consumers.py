@@ -115,12 +115,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
         data:dict = json.loads(text_data)
 
         user = await self.async_get_user(token = data['token'])
-        print(user)
-        message_instance = await self.async_message_create(
-            writer = user,
-            text = data['message'],
-            chat = self.chat
-        )
+        
+        try:
+            message_instance = await self.async_message_create(
+                writer = user,
+                text = data['message'],
+                chat = self.chat
+            )
+        except:
+            self.send(json.dumps({
+                "error":"Message text must be not blank"
+                }))
+            return
 
         message_json = MessageSerializer(message_instance).data
         logger.debug(message_json)

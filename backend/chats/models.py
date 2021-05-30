@@ -12,7 +12,7 @@ class Message(models.Model):
         default     = uuid.uuid4,
         editable    = False
     )
-    text = models.CharField(max_length = 500, null = True, blank = True)
+    text = models.CharField(max_length = 500, null = True)
     writer = models.ForeignKey( settings.AUTH_USER_MODEL , on_delete = models.PROTECT )
 
     created_at = models.DateTimeField(auto_now_add = True, editable = False)
