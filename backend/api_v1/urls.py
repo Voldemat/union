@@ -2,7 +2,11 @@ from django.urls import path
 
 from rest_framework.routers import SimpleRouter
 
-from api_v1.views import UserViewSet, TokenAuthentication, ChatViewSet
+from api_v1.views import (
+    UserViewSet,
+    TokenAuthentication,
+    ChatViewSet,
+)
 
 from rest_swagger.views import get_swagger_view
 

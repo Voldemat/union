@@ -30,10 +30,26 @@ class Chat(models.Model):
         editable    = False
     )
 
-    name = models.CharField(max_length = 50, default = '')
+    name = models.CharField(max_length = 50, default = 'GroupChat')
     users = models.ManyToManyField(  settings.AUTH_USER_MODEL )
 
 
     def __str__(self):
         return str(self.id)
 
+    def is_personal(self):
+        if len(self.users.all()) > 2:
+            return False
+        return True
+
+    def get_name(self, *args, **kwargs):
+        if self.is_personal() and 'user' in kwargs:
+            return self.get_personal_chat_name(kwargs['user'])
+        else:
+            return self.name
+
+    def get_personal_chat_name(self, user):
+        for instance in self.users.all():
+            if instance != user:
+                return instance.get_full_name()
+        return "It`s not your chat impostor!"

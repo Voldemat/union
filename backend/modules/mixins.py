@@ -6,14 +6,19 @@ from rest_framework.response            import Response
 from cache.models       import redis_db as redis
 
 class ModelViewSetRedis(ModelViewSet):
+    def _serialize_queryset(self, *args, **kwargs):
+        queryset:QueryDict = self.get_queryset()
+        serializer_class = self.get_serializer()
+        return self.serializer_class(queryset, *args, **kwargs).data
+
     def list(self, request):
         # get redis obj or None
         datalist = redis.get_list(prefix = self.db_name, json = True)
-
+        print(self.request.user)
         # if redis obj does not exist
         if not datalist:
             queryset:QueryDict = self.get_queryset()
-            datalist = self.get_serializer(queryset, many = True).data
+            datalist = self._serialize_queryset(many = True)
 
             redis.set_list(
                 prefix = self.db_name,
@@ -26,6 +31,7 @@ class ModelViewSetRedis(ModelViewSet):
         # get instance_id
         instance_id:str = self.kwargs['pk']
 
+        print(self.request.user)
         # get json object from redis
         obj_json:dict = redis.get(
             instance_id,
@@ -38,8 +44,7 @@ class ModelViewSetRedis(ModelViewSet):
             obj:object          = self.get_object()
 
             # parse it into json
-            serializer:object           = self.get_serializer(obj)
-            obj_json:dict               = serializer.data
+            obj_json:dict               = self._serialize_queryset(many = False)
 
             # set json object into redis db
             redis.set(

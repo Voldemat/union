@@ -2,7 +2,7 @@
     User global model
 """
 import uuid
-
+from itertools import chain
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
@@ -87,9 +87,13 @@ class User(AbstractBaseUser, models.Model):
 
     def get_chats(self):
         chats:list = Chat.objects.filter(users__id = str(self.id))
-        print(chats)
         return chats
 
+
+    def get_full_name(self):
+        return self.first_name + self.last_name
+
+        
     def has_perm(self, perm, obj = None):
         # "Does the user have a specific permission?"
         # Simplest possible answer: Yes, always

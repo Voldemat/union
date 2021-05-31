@@ -17,6 +17,8 @@ from modules.utils import get_db_table_name
 from chats.models import Chat, Message
 from chats.serializers import ChatSerializer
 
+
+
 class UserViewSet(ModelViewSetRedis):
     queryset:QueryDict = get_user_model().objects.all()
     serializer_class = UserSerializer
@@ -31,6 +33,13 @@ class ChatViewSet(ModelViewSetRedis):
     serializer_class = ChatSerializer
     permission_classes = [IsAuthenticated,]
     db_name = get_db_table_name(  Chat  )
+
+    def _serialize_queryset(self, *args, **kwargs):
+        queryset:QueryDict = self.get_queryset()
+        print("i`m here")
+        return self.serializer_class(queryset, user = self.request.user, *args, **kwargs).data
+
+
 
     
 
