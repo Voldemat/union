@@ -57,3 +57,5 @@ class ModelViewSetRedis(ModelViewSet):
             )
 
         return Response(obj_json, status = 200)
+
+

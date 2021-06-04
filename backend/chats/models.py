@@ -13,11 +13,11 @@ class Message(models.Model):
         editable    = False
     )
     text = models.CharField(max_length = 500, null = True)
-    writer = models.ForeignKey( settings.AUTH_USER_MODEL , on_delete = models.PROTECT )
+    writer = models.ForeignKey( settings.AUTH_USER_MODEL , on_delete = models.CASCADE )
 
     created_at = models.DateTimeField(auto_now_add = True, editable = False)
 
-    chat = models.ForeignKey( 'Chat', on_delete = models.PROTECT, related_name = 'messages' )
+    chat = models.ForeignKey( 'Chat', on_delete = models.CASCADE, related_name = 'messages' )
 
     def __str__(self):
         return f'Message - {self.writer}'
