@@ -33,6 +33,10 @@ class Chat(models.Model):
     name = models.CharField(max_length = 50, default = 'GroupChat')
     users = models.ManyToManyField(  settings.AUTH_USER_MODEL )
 
+    def save(self, *args, **kwargs):
+        if len(self.users.all()) < 2:
+            raise ValueError("Chat should have minimum 2 users")
+        super(Chat, self).save(*args, **kwargs)
 
     def __str__(self):
         return str(self.id)
@@ -52,4 +56,4 @@ class Chat(models.Model):
         for instance in self.users.all():
             if instance != user:
                 return instance.get_full_name()
-        return "It`s not your chat impostor!"
+        return "Only you in chat"

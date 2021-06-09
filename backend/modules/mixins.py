@@ -14,7 +14,7 @@ class ModelViewSetRedis(ModelViewSet):
     def list(self, request):
         # get redis obj or None
         datalist = redis.get_list(prefix = self.db_name, json = True)
-        print(self.request.user)
+        
         # if redis obj does not exist
         if not datalist:
             queryset:QueryDict = self.get_queryset()
@@ -31,7 +31,6 @@ class ModelViewSetRedis(ModelViewSet):
         # get instance_id
         instance_id:str = self.kwargs['pk']
 
-        print(self.request.user)
         # get json object from redis
         obj_json:dict = redis.get(
             instance_id,

@@ -22,8 +22,8 @@ class ChatSerializer(ModelSerializer):
     def __init__(self, *args, **kwargs):
         if 'user' in kwargs:
             self.user = kwargs['user']
-            print(self.user)
             del kwargs['user']
+
         super().__init__(*args, **kwargs)
 
     name = SerializerMethodField('get_name')

@@ -12,8 +12,8 @@ from chats.serializers import MessageSerializer
 # logging flow
 logger = logging.getLogger(__name__)
 handler = logging.StreamHandler()
-logger.setLevel(logging.WARNING)
-handler.setLevel(logging.WARNING)
+logger.setLevel(logging.DEBUG)
+handler.setLevel(logging.DEBUG)
 logger.addHandler(handler)
 
 class ChatConsumer(AsyncWebsocketConsumer):

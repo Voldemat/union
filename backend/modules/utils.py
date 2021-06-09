@@ -13,14 +13,12 @@ def str_to_json(value:str) -> Optional[dict]:
     if not value:
         return None
 
-    print(value)
     value = value.replace("\'",'\"')
 
     value = value.replace("None", "null")
 
     result = json.loads(value)
 
-    print(result)
     return result
 
 
