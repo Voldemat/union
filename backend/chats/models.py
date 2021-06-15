@@ -5,6 +5,28 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 # Create your models here.
 
+class ChatManager(models.Manager):
+    def create_chat(self, *args, **kwargs) -> object:
+        if 'users' in kwargs:
+
+            self.users = kwargs['users']
+
+            if len(self.users) < 2:
+                raise ValueError("Chat should have minimum 2 users")
+
+            del kwargs['users']
+
+        chat = self.create(*args, **kwargs)
+
+
+        if getattr(self, 'users', None):
+            chat.users.add(*self.users)
+            chat.save()
+
+        return chat
+
+
+
 class Message(models.Model):
     id = models.UUIDField(
         primary_key = True,
@@ -33,10 +55,13 @@ class Chat(models.Model):
     name = models.CharField(max_length = 50, default = 'GroupChat')
     users = models.ManyToManyField(  settings.AUTH_USER_MODEL )
 
+    objects = ChatManager()
+
     def save(self, *args, **kwargs):
         if len(self.users.all()) < 2:
             raise ValueError("Chat should have minimum 2 users")
         super(Chat, self).save(*args, **kwargs)
+
 
     def __str__(self):
         return str(self.id)

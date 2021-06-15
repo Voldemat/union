@@ -2,9 +2,10 @@
 	User global model
 """
 import uuid
-from itertools import chain
+from typing import Optional
 
 from django.db import models
+from django.db.models.query          import QuerySet
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
@@ -74,7 +75,9 @@ class User(AbstractBaseUser, models.Model):
 
 	about_me    = models.CharField('About me', max_length = 1000, blank = True, null = True)
 
-	friends 	= models.ManyToManyField(settings.AUTH_USER_MODEL)
+	friends 	= models.ManyToManyField(settings.AUTH_USER_MODEL, blank = True)
+
+
 	is_active   = models.BooleanField(default = True)
 	is_staff    = models.BooleanField(default = False)
 	is_admin    = models.BooleanField(default = False)
@@ -93,6 +96,26 @@ class User(AbstractBaseUser, models.Model):
 
 	def get_friends(self):
 		return self.friends.all()
+
+	def get_friends_chats(self) -> Optional[QuerySet]:
+		friends_chats:list = list()
+		for user in self.get_friends():
+			chat:Optional[Chat] = self.get_friend_chat(user)
+			if chat == None:
+				chat = Chat.objects.create(users = [self, user])
+
+			friends_chats.append(chat)
+
+
+		return friends_chats if friends_chats else None
+
+	def get_friend_chat(self, friend:object) -> Optional[Chat]:
+		for chat in self.get_chats():
+			chat_users:QuerySet = chat.users.all()
+			if len(chat_users) == 2 and self in chat_users and friend in chat_users:
+				return chat
+
+		return None
 
 
 	def get_full_name(self):

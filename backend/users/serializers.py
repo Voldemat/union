@@ -10,11 +10,10 @@ class FriendSerializer(ModelSerializer):
             "id",
             "email",
             "first_name",
-            "last_name"
+            "last_name",
+            "about_me",
+            "avatar"
         )
-        extra_kwargs = {
-            "id":{ 'read_only':True }
-        }
 
 
 class UserSerializer(ModelSerializer):
@@ -24,7 +23,8 @@ class UserSerializer(ModelSerializer):
         exclude = ['last_login', 'is_active', 'is_staff', 'is_admin']
         extra_kwargs = {
             'password'  : {'write_only': True},
-            'id'        : {'read_only': True}
+            'id'        : {'read_only': True},
+            "friends"   : {'required':False}
         }
 
     def create(self, validated_data):
