@@ -6,10 +6,13 @@ from typing import Optional
 
 from django.db import models
 from django.db.models.query          import QuerySet
+from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
+
 from chats.models import Chat
+
 
 class UserManager(BaseUserManager):
 	def create_user(self, email:str = None, first_name:str = None, last_name:str = None, birth_date:str = None, avatar:object = None, about_me:str = None, password:str = None):
@@ -75,7 +78,10 @@ class User(AbstractBaseUser, models.Model):
 
 	about_me    = models.CharField('About me', max_length = 1000, blank = True, null = True)
 
-	friends 	= models.ManyToManyField(settings.AUTH_USER_MODEL, blank = True)
+	friends 	= models.ManyToManyField(
+		settings.AUTH_USER_MODEL,
+		blank = True,
+	)
 
 
 	is_active   = models.BooleanField(default = True)
@@ -89,6 +95,13 @@ class User(AbstractBaseUser, models.Model):
 
 	def __str__(self):
 		return self.email
+
+	def clean(self, *args, **kwargs) -> None:
+		if self in self.friends.all():
+			raise ValidationError("Friends contain self!")
+		super(User, self).clean(*args, **kwargs)
+
+
 
 	def get_chats(self):
 		chats:list = Chat.objects.filter(users__id = str(self.id))
