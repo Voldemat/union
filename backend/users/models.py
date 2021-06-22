@@ -15,7 +15,17 @@ from chats.models import Chat
 
 
 class UserManager(BaseUserManager):
-	def create_user(self, email:str = None, first_name:str = None, last_name:str = None, birth_date:str = None, avatar:object = None, about_me:str = None, password:str = None):
+	def create_user(
+		self:object,
+		email:str 		= None,
+		first_name:str 	= None,
+		last_name:str 	= None,
+		birth_date:str 	= None,
+		avatar:object 	= None,
+		about_me:str 	= None,
+		password:str 	= None) -> object: # -> User
+
+
 		if not email:
 			raise ValueError('Users must have an email address')
 
@@ -33,7 +43,7 @@ class UserManager(BaseUserManager):
 
 		return user
 
-	def create_superuser(self, email, password = None):
+	def create_superuser(self, email, password = None) -> object: # -> User
 		user = self.create_user(email = email, password = password)
 
 
@@ -78,11 +88,6 @@ class User(AbstractBaseUser, models.Model):
 
 	about_me    = models.CharField('About me', max_length = 1000, blank = True, null = True)
 
-	friends 	= models.ManyToManyField(
-		settings.AUTH_USER_MODEL,
-		blank = True,
-	)
-
 
 	is_active   = models.BooleanField(default = True)
 	is_staff    = models.BooleanField(default = False)
@@ -93,22 +98,18 @@ class User(AbstractBaseUser, models.Model):
 
 	USERNAME_FIELD = 'email'
 
-	def __str__(self):
+	def __str__(self) -> str:
 		return self.email
 
-	def clean(self, *args, **kwargs) -> None:
-		if self in self.friends.all():
-			raise ValidationError("Friends contain self!")
-		super(User, self).clean(*args, **kwargs)
 
-
-
-	def get_chats(self):
-		chats:list = Chat.objects.filter(users__id = str(self.id))
+	def get_chats(self) -> QuerySet:
+		chats:QuerySet = Chat.objects.filter(users__id = str(self.id))
 		return chats
 
-	def get_friends(self):
-		return self.friends.all()
+
+	def get_friends(self) -> QuerySet:
+		queryset:QuerySet = Friend.objects.filter(user = self)
+		return queryset
 
 	def get_friends_chats(self) -> Optional[QuerySet]:
 		friends_chats:list = list()
@@ -131,19 +132,40 @@ class User(AbstractBaseUser, models.Model):
 		return None
 
 
-	def get_full_name(self):
+	def get_full_name(self) -> str:
 		return self.first_name + " " + self.last_name
 
 		
-	def has_perm(self, perm, obj = None):
+	def has_perm(self, perm, obj = None) -> bool:
 		# "Does the user have a specific permission?"
 		# Simplest possible answer: Yes, always
 		return True
 
-	def has_module_perms(self, app_label):
+	def has_module_perms(self, app_label) -> bool:
 		# "Does the user have permissions to view the app `app_label`?"
 		# Simplest possible answer: Yes, always
 		return True
 
 
 
+class Friend(models.Model):
+	id = models.UUIDField(
+		primary_key = True,
+		db_index = True,
+		default = uuid.uuid4,
+		editable = False
+	)
+
+	user = models.ForeignKey(User, on_delete = models.CASCADE)
+
+	friend = models.ForeignKey(User, on_delete = models.CASCADE, related_name = "friend_model")
+
+	def __str__(self) -> str:
+		return f'Friend - {self.friend}'
+
+
+	def clean(self) -> None:
+		if self.user == self.friend:
+			raise ValidationError("User objects equal friend object")
+
+		return None
