@@ -29,7 +29,11 @@ export default function FriendsPage(){
             }
         })
         .then(response => {
-            dispatch(setFriends(response.data))
+            const response_data = response.data.map(object => {
+                return object.friend
+            }) 
+            window.data = response.data
+            dispatch(setFriends(response_data))
         })
         .catch(error => {
             setError(error)

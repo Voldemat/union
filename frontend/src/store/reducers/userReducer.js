@@ -1,8 +1,8 @@
 const initialState = {
     "id":null,
-    "token":"c84075889cb5ecc765f317b4415178b58da6249e",
-    "email":"you@email.com",
-    "avatar":"/media/users/avatars/joseph-barrientos-tT6hv8y4Iz8-unsplash_1.jpg"
+    "token":"48cf7f3015d3ecfde4153e6778e578a17a112488",
+    "email":"viocan2005@gmail.com",
+    "avatar": null
 
 }
 function userReducer(state = initialState, action){
