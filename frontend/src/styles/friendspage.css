@@ -1,0 +1,142 @@
+section.friends-grid{
+    display: grid;
+    width:100vw;
+    height:90vh;
+    grid-template-columns:minmax(135px, 1.5fr) 5fr;
+    grid-template-rows: 70px 1fr;
+    grid-template-areas:"title title" 
+                        "navbar main";
+}
+
+
+section.friends-list{
+    grid-area: navbar;
+    display: flex;
+    flex-direction: column;
+    /*align-items: center;*/ 
+    background: linear-gradient(-45deg,#09404d, #4eacc2);
+    border-right: 4px solid #132C33;
+    min-width: 135px;
+}
+h1.friends-title{
+    grid-area: title;
+    display: inline;
+    display: flex;
+    justify-content: center;
+    font-size: 3em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-bottom: 3px solid #132C33;
+    transition: letter-spacing 0.5s ease 0.1s;
+}
+h1.friends-title:hover{
+    letter-spacing: 0.3em;
+}
+
+section.friends-detail{
+    grid-area: main;
+}
+
+.friend-link{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 12vh;
+    border-bottom: 2px solid #51C4D3;
+    min-height: 70px;
+    text-decoration: none;
+}
+.friend-link .container{
+    margin-left: 15px;
+}
+.friend-link .full-name{
+    color: #D8E3E7;
+    letter-spacing: 0.1vw;
+}
+.friend-link .avatar{
+    object-fit: cover;
+    width: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-position: center center;
+    margin-right: 0.4vw;
+
+}
+.email{
+    font-size: 1.1em;
+    color: #b0c6cf;
+    font-style: italic;
+    cursor: pointer;
+}
+
+
+@media screen and (max-width: 1321px){
+    .friend-link .email{
+        display: none;
+    }
+}
+@media screen and (max-width: 776px){
+    .friend-link .avatar{
+        display: none;
+    }
+}
+
+
+.detail{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    /*flex-direction: column;*/
+}
+.detail .avatar{
+    display: flex;
+    align-content: center;
+    margin: 1% 2.5%;
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 50%;
+    transition: box-shadow 0.5s ease 0.1s;
+}
+.detail .avatar img{
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    background-position: center center;
+    transition: transform 0.5s ease 0.2s;
+}
+.detail .avatar:hover{
+    box-shadow: 0 0 5px rgb(23, 196, 235),
+                0 0 10px rgb(23, 196, 235),
+                0 0 15px rgb(23, 196, 235);
+}
+.detail .avatar:hover img{
+    transform: scale(1.2);
+}
+.detail .email .line{
+    border: 1px solid #51C4D3;
+    border-radius: 10px;
+    transition: box-shadow 0.5s ease;
+}
+.detail .container{
+    margin: 3%;
+}
+.detail .container h1{
+    font-size: 2.5em;
+    transition: text-shadow 0.5s ease, transform 0.5s ease;
+
+}
+.detail .container h1:hover{
+    text-shadow: 0 0 5px rgb(23, 196, 235),
+                0 0 10px rgb(23, 196, 235);
+    transform: skewX(-10deg);
+}
+.detail .container h1:hover ~ .email .line{
+    box-shadow: 0 0 5px rgb(23, 196, 235),
+                0 0 10px rgb(23, 196, 235),
+                0 0 15px rgb(23, 196, 235);
+}

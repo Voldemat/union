@@ -1,0 +1,64 @@
+header{
+    position: relative;
+    left:0;
+    top:0;
+    width:100vw;
+    height:10vh;
+    min-height:50px;
+    background-color: #132c33;
+    color:#d8e3e7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right:4vw;
+}
+header a.logo{
+    position: relative;
+    left:1.5vw;
+    font-size:2.2em;
+    color:inherit;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    text-decoration:none;
+    
+}
+
+header nav{
+    display: flex;
+    align-items: center;
+}
+header nav a{
+    position: relative;
+    color:inherit;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding:0 1vw;
+    font-size:1.2em;
+    letter-spacing: 0.1em;
+    transition: color 1s ease-in-out;
+}
+header nav a::before{
+    position: absolute;
+    content: '';
+    width:0;
+    left:15%;
+    right:15%;
+    background-color:#51c4d3;
+    height:3px;
+    border-radius:10px;
+    top:99%;
+    transition: width 1s ease-in-out;
+}
+header nav a:hover{
+    color:#51c4d3;
+}
+header nav a:hover::before{
+    width:70%;
+}
+
+@media screen and (max-width: 450px){
+    header .logo{
+        left:3.5vw;
+        font-size:1.7em;
+    }
+}
