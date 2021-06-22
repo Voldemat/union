@@ -3,9 +3,8 @@
     width:100vw;
     height:90vh;
     grid-template-columns:minmax(100px, 2fr) 5fr;
-    grid-template-rows: 50px 1fr 50px;
+    grid-template-rows: 1fr 50px;
     grid-template-areas: "navbar main"
-                         "navbar main"
                          "navbar form";
 }
 
@@ -26,10 +25,8 @@
 .chats-grid article{
     position: relative;
     display: flex;
-    justify-content: flex-end;
     flex-direction: column;
-    /*align-items: flex-end;*/
-    grid-area:main;
+    grid-area: main;
     overflow-y: scroll;
     overflow-x: hidden;
     scroll-behavior: smooth;

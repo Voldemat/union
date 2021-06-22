@@ -128,8 +128,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 }))
             return
 
-        message_json = MessageSerializer(message_instance).data
-        logger.debug(message_json)
+        
+        def get_message_data():
+            return MessageSerializer(message_instance, many = False).data
+
+
+        message_json = await sync_to_async(get_message_data)()
+
+    
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -141,7 +147,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         message = event['message']
 
-        logger.debug(message)
+        logger.debug(f'Message: {message}')
 
         await self.send(text_data = json.dumps(message))
 
