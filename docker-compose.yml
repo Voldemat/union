@@ -1,13 +1,13 @@
 version: '3.8'
 services:
-  web:
-    build: .
+  backend:
+    build: ./backend
     image: union_backend_web
     command: python manage.py runserver 0.0.0.0:8000
 
     container_name: django
     volumes: 
-      - .:/app
+      - ./backend:/app
 
     ports:
       - "8000:8000"
@@ -35,6 +35,22 @@ services:
   redis:
     container_name: redis
     image: redis:6.2.3
+
+  frontend:
+    build: ./frontend
+    image: union_frontend_web
+    command: npm start
+    container_name: react
+
+    volumes:
+      - ./frontend:/frontend
+
+    ports:
+      - "9000:9000"
+
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
+
 
 volumes:
   postgres_data:

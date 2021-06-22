@@ -73,9 +73,9 @@ class User(AbstractBaseUser, models.Model):
 		max_length      = 255,
 		unique          = True
 	)
-	first_name  = models.CharField('First name', max_length = 255)
+	first_name  = models.CharField('First name', max_length = 255, null = True)
 
-	last_name   = models.CharField('Last name', max_length = 255)
+	last_name   = models.CharField('Last name', max_length = 255, null = True)
 
 	birth_date  = models.DateField('Birth date', blank = True, null = True)
 
