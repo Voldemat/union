@@ -16,7 +16,12 @@ function Header(){
                 <Link to="/friends"> Friends </Link>
                 {user.token === null ? <Link to="/login">
                     LogIn
-                </Link>: <Link to="/logout">logout</Link>}
+                </Link>: (
+                    <div>
+                        <p>{user.email}</p>
+                        <Link to="/logout">logout</Link>
+                    </div>
+                )}
             </header>
     )
 }

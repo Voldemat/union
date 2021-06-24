@@ -1,3 +1,4 @@
+from rest_framework import serializers
 from rest_framework.serializers import (
     ModelSerializer,
     StringRelatedField,
@@ -118,4 +119,14 @@ class UserSerializer(ModelSerializer):
         """
         instance:User = User.objects.create_user(**validated_data)
         return instance
+
+    # def is_valid(self, *args, **kwargs) -> None:
+    #     print('is_valid')
+    #     try:
+    #         super(UserSerializer, self).is_valid(*args, **kwargs)
+    #     except serializers.ValidationError as error:
+    #         print(error)
+    #     raise Exception()
+
+    #     return None
 

@@ -1,8 +1,9 @@
 import React from 'react';
 
 
-export default function Error(props){
+export default function Error({error}){
+    console.log(error)
     return (
-        <div className='error-msg'>{props.msg}</div>
+        <div className='error-msg'>error</div>
     )
 }

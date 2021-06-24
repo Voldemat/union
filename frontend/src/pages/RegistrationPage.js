@@ -9,7 +9,6 @@ import Error from '../components/Error.js';
 import '../styles/registration.css'
 
 export default function RegistrationPage(){
-
     const [error, setError] = useState({})
     const apiUrls   = useSelector(state => state.api)
 
@@ -33,19 +32,15 @@ export default function RegistrationPage(){
             history.push("/login")
         })
         .catch(error => {
-            console.error(error)
-            setError(error)
-        })
-
-        setError({})
-        form.reset()
-
+            window.error = error
+            setError(error.response.data)
+        })        
     }
     return (
         <>
             <h1>RegistrationPage</h1>
             <section className="errors">
-                {error !== {} ? <Error error={error} /> : ""}
+                {error && <Error error={error} />}
             </section>
             <form onSubmit={createUser}>
                 <input type="email" name="email"/>

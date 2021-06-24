@@ -24,6 +24,7 @@ class UserViewSet(ModelViewSetRedis):
 
     db_name:str = get_db_table_name(  get_user_model()  )
 
+
 class ChatViewSet(ModelViewSetRedis):
     permission_classes:list = [IsAuthenticated,]
 

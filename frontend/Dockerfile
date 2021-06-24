@@ -1,7 +1,6 @@
-FROM node:14
+FROM node:alpine
 
 ENV NODE_ENV=development
-ENV DEBUG=*
 
 
 WORKDIR /frontend

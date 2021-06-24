@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 // Import components
 import Message from './Message.js';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import scrollButtonArrowImage from '../images/scrollButtonArrow.png';
 
 
 function Chat(props){
+    const params = useParams()
     const [messages, setMessages] = useState([])
     const [buttonTag, setButtonTag] = useState(false)
     const user = useSelector(state => state.user)
@@ -75,7 +77,7 @@ function Chat(props){
         }
 
 
-    }, [props.match])
+    }, [params])
 
     return (
             <>

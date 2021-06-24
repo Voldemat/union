@@ -15,6 +15,7 @@ import LoggingPage      from './pages/LoggingPage';
 import LogOutPage       from './pages/LogoutPage.js';
 import RegistrationPage from './pages/RegistrationPage.js';
 import FriendsPage      from './pages/FriendsPage.js';
+import Page404              from './pages/Page404.js';
 
 // import state requirements
 import { useSelector, useDispatch } from 'react-redux';
@@ -45,6 +46,9 @@ function App(){
                     <Route path="/logout" component={LogOutPage} exact/>
                     <Route path="/registration" component={RegistrationPage} exact />
                     <Redirect from="/" to="/home" />
+
+                    {/*404 page*/}
+                    <Route component={Page404} />
                 </Switch>
                 {user.token === null || user.token === undefined ? <Redirect to="/login" /> : ""}
             </Router>
