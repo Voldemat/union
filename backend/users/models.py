@@ -1,6 +1,3 @@
-"""
-	User global model
-"""
 import uuid
 from typing import Optional
 
@@ -8,8 +5,11 @@ from django.db import models
 from django.db.models.query          import QuerySet
 from django.core.exceptions import ValidationError
 from django.conf import settings
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-
+from django.contrib.auth.models import (
+	AbstractBaseUser,
+	BaseUserManager,
+	PermissionsMixin
+)
 
 from chats.models import Chat
 
@@ -23,7 +23,8 @@ class UserManager(BaseUserManager):
 		birth_date:str 	= None,
 		avatar:object 	= None,
 		about_me:str 	= None,
-		password:str 	= None) -> object: # -> User
+		password:str 	= None, 
+		*args, **kwargs) -> object: # -> User
 
 
 		if not email:
@@ -57,10 +58,12 @@ class UserManager(BaseUserManager):
 		return user
 
 
+	# assign create_user func to create  
+	create = create_user
 
 
 
-class User(AbstractBaseUser, models.Model):
+class User(AbstractBaseUser, PermissionsMixin):
 	id = models.UUIDField(
 		primary_key = True,
 		default = uuid.uuid4,
