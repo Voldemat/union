@@ -10,6 +10,7 @@
     
     i. Clone repository
 
-        """
-            git clone https://github.com/Voldemat/union 
-        """bash
+        ```
+            a = 1
+            b = 2
+        ```
