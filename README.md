@@ -13,3 +13,18 @@
 ```bash
 git clone https://github.com/tchapi/markdown-cheatsheet/blob/master/README.md
 ```
+
+2. Run docker-compose
+
+```bash
+docker-compose up -d
+``` 
+
+3. Front-end
+
+It place on localhost:9000
+
+4. Back-end
+
+Back-end place on localhost:8000
+
