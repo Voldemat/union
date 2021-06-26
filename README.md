@@ -17,6 +17,7 @@ git clone https://github.com/tchapi/markdown-cheatsheet/blob/master/README.md
 2. Run docker-compose
 
 ```bash
+cd union
 docker-compose up -d
 ``` 
 
