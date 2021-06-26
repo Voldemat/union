@@ -28,3 +28,5 @@ It place on localhost:9000
 
 Back-end place on localhost:8000
 
+Api docs you can find at localhost:8000/docs
+
