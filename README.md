@@ -11,7 +11,7 @@
 1. Clone repository
 
 ```bash
-git clone https://github.com/tchapi/markdown-cheatsheet/blob/master/README.md
+git clone https://github.com/Voldemat/union
 ```
 
 2. Run docker-compose
