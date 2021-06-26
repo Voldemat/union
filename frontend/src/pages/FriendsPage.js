@@ -23,6 +23,7 @@ export default function FriendsPage(){
 
     // requests to server
     useEffect(() => {
+        console.log('request is send')
         axios.get(apiUrls.friends,{
             headers:{
                 "Authorization":`Token ${user.token}`
@@ -39,7 +40,7 @@ export default function FriendsPage(){
             setError(error)
             console.error(error)
         })
-    }, [user])
+    },[])
     return (
         <>
             <section className="friends-grid">

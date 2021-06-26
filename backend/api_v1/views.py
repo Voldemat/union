@@ -1,5 +1,6 @@
 from django.db.models.query          import QuerySet
-from django.contrib.auth  import get_user_model
+from django.contrib.auth             import get_user_model
+from django.shortcuts                import render
 
 from modules.mixins import ModelViewSetRedis
 from modules.utils import get_db_table_name
@@ -32,7 +33,7 @@ class ChatViewSet(ModelViewSetRedis):
 
     db_name:str = get_db_table_name(  Chat  )
 
-    def get_queryset(self):
+    def get_queryset(self, *args, **kwargs):
         queryset:QuerySet = self.request.user.get_chats()
         return queryset
 
@@ -73,7 +74,7 @@ class TokenAuthentication(ObtainAuthToken):
 
 class FriendsAPIView(APIView):
     permission_classes:list = [IsAuthenticated,]
-    def get(self, request, format = None):
+    def get(self, request, format = None, *args, **kwargs):
         user:User = request.user
 
         queryset:QuerySet          = request.user.get_friends()

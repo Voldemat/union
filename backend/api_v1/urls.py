@@ -6,7 +6,7 @@ from api_v1.views import (
     UserViewSet,
     TokenAuthentication,
     ChatViewSet,
-    FriendsAPIView
+    FriendsAPIView,
 )
 
 from rest_swagger.views import get_swagger_view

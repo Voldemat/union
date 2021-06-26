@@ -62,6 +62,33 @@ class UserManager(BaseUserManager):
 	create = create_user
 
 
+class FriendManager(models.Manager):
+	pass
+
+
+class Friend(models.Model):
+	id = models.UUIDField(
+		primary_key = True,
+		db_index = True,
+		default = uuid.uuid4,
+		editable = False
+	)
+
+	user = models.ForeignKey('User', on_delete = models.CASCADE)
+
+	friend = models.ForeignKey('User', on_delete = models.CASCADE, related_name = "friend_model")
+
+	objects = FriendManager()
+
+	def __str__(self) -> str:
+		return f'Friend - {self.friend}'
+
+
+	def clean(self) -> None:
+		if self.user == self.friend:
+			raise ValidationError("User objects equal friend object")
+
+		return None
 
 class User(AbstractBaseUser, PermissionsMixin):
 	id = models.UUIDField(
@@ -149,26 +176,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 		# Simplest possible answer: Yes, always
 		return True
 
-
-
-class Friend(models.Model):
-	id = models.UUIDField(
-		primary_key = True,
-		db_index = True,
-		default = uuid.uuid4,
-		editable = False
-	)
-
-	user = models.ForeignKey(User, on_delete = models.CASCADE)
-
-	friend = models.ForeignKey(User, on_delete = models.CASCADE, related_name = "friend_model")
-
-	def __str__(self) -> str:
-		return f'Friend - {self.friend}'
-
-
-	def clean(self) -> None:
-		if self.user == self.friend:
-			raise ValidationError("User objects equal friend object")
+	@classmethod
+	def bind_friends(self, user_1:object, user_2:object) -> None:
+		friend_instance:Friend = Friend.objects.get_or_create(user = user_1, friend = user_2)
+		friend_instance:Friend = Friend.objects.get_or_create(friend = user_1, user = user_2)
 
 		return None
+
+
+
+
+
