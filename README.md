@@ -8,6 +8,8 @@
 
 ## Start Project
     
-    1. Clone repository
+    i. Clone repository
 
-        code(git clone https://github.com/Voldemat/union)
+        """
+            git clone https://github.com/Voldemat/union 
+        """bash
