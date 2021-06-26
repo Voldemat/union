@@ -8,11 +8,8 @@
 
 ## Start Project
     
-i. Clone repository
+1. Clone repository
 
-```
-var a = 1
-var b = 2
-
-var user_list = [1,2,4]
+```bash
+git clone https://github.com/tchapi/markdown-cheatsheet/blob/master/README.md
 ```
