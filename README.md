@@ -8,9 +8,9 @@
 
 ## Start Project
     
-    i. Clone repository
+i. Clone repository
 
-        ```
-            a = 1
-            b = 2
-        ```
+```
+a = 1
+b = 2
+```
