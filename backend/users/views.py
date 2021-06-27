@@ -1,5 +1,5 @@
 from typing import Optional
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate
 
 
@@ -23,4 +23,6 @@ def friend_invite(request, id, *args, **kwargs):
         else:
             User.bind_friends(user, friend)
 
-    return render(request, "friend_invite.html", {})
+            return redirect("http://localhost:9000/")
+
+    return render(request, "friend_invite.html", {"user":user})

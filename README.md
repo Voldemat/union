@@ -17,8 +17,7 @@ git clone https://github.com/Voldemat/union
 2. Run docker-compose
 
 ```bash
-cd union
-docker-compose up -d
+cd union && docker-compose up -d
 ``` 
 
 3. Front-end
