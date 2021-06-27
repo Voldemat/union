@@ -25,5 +25,5 @@
 
 /backend/check.py
 /backend/static/
-/backend/staticfiles/*
+/backend/staticfiles
 /backend/media/
