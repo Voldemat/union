@@ -44,6 +44,7 @@ services:
 
     volumes:
       - ./frontend:/frontend
+      - C:\Users\Admin\AppData\Local\Temp:/tmp
 
     ports:
       - "9000:9000"

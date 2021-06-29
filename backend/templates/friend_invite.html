@@ -10,5 +10,13 @@
 <body>
     <h1>Invite from {{user.email}}</h1>
     <p>{{user.get_full_name}}</p>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <h2>{{error}}</h2>
+        <input type="email" name="email">
+        <input type="password" name="password">
+
+        <input type="submit">
+    </form>
 </body>
 </html>

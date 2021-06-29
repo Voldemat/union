@@ -11,6 +11,7 @@ class ChatManager(models.Manager):
 
             self.users = kwargs['users']
 
+            print(self.users)
             if len(self.users) < 2:
                 raise ValueError("Chat should have minimum 2 users")
 
@@ -56,12 +57,6 @@ class Chat(models.Model):
     users = models.ManyToManyField(  settings.AUTH_USER_MODEL )
 
     objects = ChatManager()
-
-    def save(self, *args, **kwargs):
-        if len(self.users.all()) < 2:
-            raise ValueError("Chat should have minimum 2 users")
-        super(Chat, self).save(*args, **kwargs)
-
 
     def __str__(self):
         return str(self.id)

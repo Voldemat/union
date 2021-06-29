@@ -57,5 +57,8 @@ module.exports = {
         port: 9000,
         historyApiFallback: true,
         hot: true,
+        watchOptions:{
+            poll:500
+        }
     }
 }

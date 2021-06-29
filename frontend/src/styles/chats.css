@@ -25,7 +25,7 @@
 .chats-grid article{
     position: relative;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     grid-area: main;
     overflow-y: scroll;
     overflow-x: hidden;

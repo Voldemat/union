@@ -163,7 +163,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 	def get_full_name(self) -> str:
-		return self.first_name + " " + self.last_name
+		first_name = self.first_name if self.first_name else ""
+		last_name = self.last_name if self.last_name else ""
+		return first_name + " " + last_name
 
 		
 	def has_perm(self, perm, obj = None) -> bool:
@@ -177,13 +179,38 @@ class User(AbstractBaseUser, PermissionsMixin):
 		return True
 
 	@classmethod
-	def bind_friends(self, user_1:object, user_2:object) -> None:
-		friend_instance:Friend = Friend.objects.get_or_create(user = user_1, friend = user_2)
-		friend_instance:Friend = Friend.objects.get_or_create(friend = user_1, user = user_2)
+	def bind_friends_and_add_chat(cls, user_1:object, user_2:object, create_chat:bool = True, *args:tuple, **kwargs:dict) -> bool:
+		"""
+			[HELP DOCS]
+				User class method that make friend instances
+				and add personal chat to given pair users.
 
-		return None
+				You can disable personal creation by setting 
+				create_chat flag to False (create_chat = False).
+
+				Users have be passed throw user_1 and user_2 args.
+
+				Method return bool variable - created flag.
+
+				if users weren`t be friends it return True, 
+				in other case it return False.
+
+		"""
+
+		# get or create friend instances for
+		# given users(yes, it shit, but I don`t want to rebuild models) 
+		_, created = Friend.objects.get_or_create(user = user_1, friend = user_2)
+		_, created = Friend.objects.get_or_create(friend = user_1, user = user_2)
+		
+		# add personal chat for given users
+		cls.add_personal_chat(users = (user_1, user_2))
+
+		# return created flag
+		return created
 
 
 
 
-
+	@classmethod
+	def add_personal_chat(cls, users:tuple[object], *args, **kwargs) -> Chat:
+		return Chat.objects.create_chat(users = users)

@@ -1,3 +1,6 @@
+from typing import Optional
+
+
 from django.forms import ModelForm
 from django.contrib.auth import get_user_model
 
@@ -25,8 +28,9 @@ class UserForm(ModelForm):
         # super save with commit = False
         user = super(UserForm, self).save(commit=False)
 
-        # check that new password isn`t equal to db password 
-        if not user.check_password(self.cleaned_data.get("password", None)):
+        clean_password:Optional[str] = self.cleaned_data.get("password", None)
+        # check that new password isn`t equal to db password
+        if not user.check_password(clean_password):
             # set user password...
             user.set_password(self.cleaned_data.get("password", None)) 
 

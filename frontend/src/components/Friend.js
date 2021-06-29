@@ -32,7 +32,7 @@ export default function Friend(props){
                         <h3 className="full-name">{user.first_name + " " + user.last_name}</h3>
                         <span className="email" onClick={(event) => copyText(event.target.innerText)}>{user.email}</span>
                     </div>
-                    <img src={`http://localhost:8000${user.avatar}`} alt="avatar" className="avatar"/>
+                    {user.avatar && <img src={`http://localhost:8000${user.avatar}`} alt="avatar" className="avatar"/>}
                 </Link>
             </div>
             ):(
@@ -46,9 +46,11 @@ export default function Friend(props){
                                 {user.email}
                             </span>
                         </div>
+                        {user.avatar && (
                         <div className="avatar">
                             <img src={`http://localhost:8000${user.avatar}`} alt="avatar"/>
                         </div>
+                        )}
                         <p className="about-me">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sed tellus quis libero iaculis convallis. Praesent eu felis et ex iaculis vestibulum. Mauris et fringilla dui. Sed scelerisque efficitur dolor at pretium. Fusce eu hendrerit justo, ac dignissim ante. Sed semper porta tempus. Nulla quis ex ac mi facilisis venenatis vitae in felis. Mauris ac bibendum eros. Morbi id ante bibendum, facilisis est vitae, volutpat tellus. Proin sit amet vehicula leo, a ultricies leo. Maecenas vel neque suscipit, egestas nisi vel, aliquet augue. Nam aliquet hendrerit neque non scelerisque.
                         </p>

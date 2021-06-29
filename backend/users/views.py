@@ -10,6 +10,7 @@ User:type = get_user_model()
 
 def friend_invite(request, id, *args, **kwargs):
     user:User = get_object_or_404(User.objects.all(), pk = id)
+    error:str = ""
 
     if request.method == 'POST':
         email:Optional[str]    = request.POST.get("email", None)
@@ -18,11 +19,14 @@ def friend_invite(request, id, *args, **kwargs):
         friend:Optional[User] = authenticate(username = email, password = password)
 
         if not friend:
-            return render(request, "friend_invite.html", {"error":"Wrong credentionals!"})
+            error = "Wrong credentionals"
+            return render(request, "friend_invite.html", {"user":user, "error":error})
 
         else:
-            User.bind_friends(user, friend)
+            if not User.bind_friends_and_add_chat(user, friend):
+                error = "You already friends"
 
-            return redirect("http://localhost:9000/")
+            return redirect("http://localhost:9000/friends")
 
-    return render(request, "friend_invite.html", {"user":user})
+    else:
+        return render(request, "friend_invite.html", {"user":user, "error":error})
