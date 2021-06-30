@@ -29,7 +29,7 @@ class UserAdminModel(admin.ModelAdmin):
         """
         super(UserAdminModel, self).__init__(*args, **kwargs)
         return None
-
+    
     form = UserForm
     list_filter = ('last_login','birth_date')
     ordering = ("birth_date", "email", "last_login")
