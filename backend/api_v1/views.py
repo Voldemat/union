@@ -15,8 +15,8 @@ from rest_framework.views               import APIView
 from chats.models       import Chat, Message
 from chats.serializers  import ChatSerializer
 
-from users.models       import User
-from users.serializers  import UserSerializer, FriendSerializer
+from users.models       import User, InviteToken
+from users.serializers  import UserSerializer, FriendSerializer, InviteTokenSerializer
 
 
 class UserViewSet(ModelViewSetRedis):
@@ -82,3 +82,11 @@ class FriendsAPIView(APIView):
         serializer:FriendSerializer = FriendSerializer(queryset, many = True)
 
         return Response(serializer.data, status = 200)
+
+
+
+class InviteTokenViewSet(ModelViewSetRedis):
+    queryset:QuerySet = InviteToken.objects.all()
+    serializer_class:ModelSerializer = InviteTokenSerializer
+
+    db_name:str = get_db_table_name(  InviteToken  )

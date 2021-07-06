@@ -44,10 +44,6 @@ class UserForm(ModelForm):
         except User.DoesNotExist:
             user_db = None
         
-        print(f'db password - {user_db.password}')
-        print(f'clean password - {clean_password}')
-        print(f'not user_db.check_password(clean_password) - {not user_db.check_password(clean_password)}')
-        print(f'not user_db.password == clean_password - {not user_db.password == clean_password}')
         # if user don`t created yet hash password
         if not user_db:
             # hash user password...

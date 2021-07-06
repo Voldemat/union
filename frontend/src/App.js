@@ -15,6 +15,7 @@ import LoggingPage      from './pages/LoggingPage';
 import LogOutPage       from './pages/LogoutPage.js';
 import RegistrationPage from './pages/RegistrationPage.js';
 import FriendsPage      from './pages/FriendsPage.js';
+import InvitePage       from './pages/InvitePage.js';
 import Page404              from './pages/Page404.js';
 
 // import state requirements
@@ -45,6 +46,7 @@ function App(){
                     <Route path="/login" component={LoggingPage} exact/>
                     <Route path="/logout" component={LogOutPage} exact/>
                     <Route path="/registration" component={RegistrationPage} exact />
+                    <Route path="/invite/:inviteToken" component={InvitePage} />
                     <Redirect from="/" to="/home" />
 
                     {/*404 page*/}

@@ -7,6 +7,7 @@ from api_v1.views import (
     TokenAuthentication,
     ChatViewSet,
     FriendsAPIView,
+    InviteTokenViewSet
 )
 
 from rest_swagger.views import get_swagger_view
@@ -17,6 +18,7 @@ router = SimpleRouter()
 
 router.register('users', UserViewSet, basename = 'users')
 router.register('chats', ChatViewSet, basename = 'chats')
+router.register('invite-tokens', InviteTokenViewSet, basename = 'invite-tokens')
 
 urlpatterns = [
     path('token-auth/', TokenAuthentication.as_view(), name = 'token-auth'),

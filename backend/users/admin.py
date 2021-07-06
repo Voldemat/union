@@ -1,22 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from users.models import User, Friend
+from users.models import User, InviteToken
 from users.forms import UserForm
 # Register your models here.
-
-class FriendAdminInlineModel(admin.TabularInline):
-    def __init__(self, *args, **kwargs) -> None:
-        """
-            [HELP DOCS]
-                Inline Friend Admin class.
-
-        """
-        super(FriendAdminInlineModel, self).__init__(*args, **kwargs)
-
-        return None
-
-    model = Friend
-    fk_name = "user"
 
 class UserAdminModel(admin.ModelAdmin):
     def __init__(self, *args, **kwargs) -> None:
@@ -47,9 +33,6 @@ class UserAdminModel(admin.ModelAdmin):
         "last_name"
     )
     list_select_related = True
-    inlines = [
-        FriendAdminInlineModel,
-    ]
 
 admin.site.register(User, UserAdminModel)
-admin.site.register(Friend)
+admin.site.register(InviteToken)

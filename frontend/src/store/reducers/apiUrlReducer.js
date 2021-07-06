@@ -1,10 +1,11 @@
+const baseUrl = "http://localhost:8000"
 const initialState = {
-    "domain"            :   "http://localhost:8000",
-    "base"              :   "http://localhost:8000/api/v1",
-    "chats"             :   "http://localhost:8000/api/v1/chats",
-    "personal-chats"    :   "http://localhost:8000/api/v1/personal-chats",
-    "users"             :   "http://localhost:8000/api/v1/users",
-    "friends"           :   "http://localhost:8000/api/v1/friends"
+    "domain"            :   baseUrl,
+    "base"              :   baseUrl + "/api/v1",
+    "chats"             :   baseUrl + "/api/v1/chats",
+    "personal-chats"    :   baseUrl + "/api/v1/personal-chats",
+    "users"             :   baseUrl + "/api/v1/users",
+    "friends"           :   baseUrl + "/api/v1/friends"
 
 }
 

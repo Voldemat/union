@@ -2,62 +2,20 @@ from rest_framework import serializers
 from rest_framework.serializers import (
     ModelSerializer,
     StringRelatedField,
+    BooleanField,
+    DateTimeField,
+    DurationField
 )
 
-from users.models import User, Friend
+from users.models import User, InviteToken
 
-
-class FriendModelUserSerializer(ModelSerializer):
-
-    def __init__(self, *args, **kwargs) -> None:
-        """
-            [HELP DOCS]
-                Friend User Read Only Serializer.
-                It serialize only friend field of Friend istance.
-                It is used in FriendsSerializer defined below to serialize
-                user(friend).
-
-                fields = (
-                    "id",
-                    "email",
-                    "first_name",
-                    "last_name",
-                    "birth_date",
-                    "about_me",
-                    "avatar"
-                )
-
-        """
-
-        super(FriendModelUserSerializer, self).__init__(*args, **kwargs)
-
-        return None
-
-
-    class Meta:
-        model = User
-        fields = (
-            "id",
-            "email",
-            "first_name",
-            "last_name",
-            "birth_date",
-            "about_me",
-            "avatar"
-        )
-    read_only_fields = "__all__" 
 
 class FriendSerializer(ModelSerializer):
     def __init__(self, *args, **kwargs) -> None:
         """
             [HELP DOCS]
                 FriendSerializer class
-                It serialize Friend instance,
-                but only friend field, uses FriendModelUserSerializer defined
-                above.
-                This serializer is used at "/friends" endpoint to serialize user friends.
-
-                For additional info see api_v1.views.FriendsAPIView
+                It serialize friends field of user isntance
 
         """
 
@@ -65,12 +23,20 @@ class FriendSerializer(ModelSerializer):
         super(FriendSerializer, self).__init__(*args, **kwargs)
 
         return None
-    friend = FriendModelUserSerializer(many = False)
     class Meta:
-        model = Friend
-        fields = (
-            "friend",
+        model = User
+        exclude = (
+            'last_login',
+            'is_active',
+            'is_staff',
+            'is_admin',
+            'is_superuser',
+            'user_permissions',
+            'friends'
         )
+        extra_kwargs = {
+            '__all__':{'read_only': True}
+        }
 
 
 class UserSerializer(ModelSerializer):
@@ -83,7 +49,10 @@ class UserSerializer(ModelSerializer):
                     'last_login',
                     'is_active',
                     'is_staff',
-                    'is_admin'
+                    'is_admin',
+                    'is_superuser',
+                    'user_permissions',
+                    'friends'
                 )
                 Password field is write_only,
                 and id   field is read_only.
@@ -99,10 +68,17 @@ class UserSerializer(ModelSerializer):
 
         return None
 
-    friends = FriendSerializer(source = 'get_friends', many = True)
+    friends = FriendSerializer(many = True)
     class Meta:
         model = User
-        exclude = ['last_login', 'is_active', 'is_staff', 'is_admin']
+        exclude = (
+            'last_login',
+            'is_active',
+            'is_staff',
+            'is_admin',
+            'is_superuser',
+            'user_permissions'
+        )
         extra_kwargs = {
             'password'  : {'write_only': True},
             'id'        : {'read_only': True}
@@ -120,13 +96,17 @@ class UserSerializer(ModelSerializer):
         instance:User = User.objects.create_user(**validated_data)
         return instance
 
-    # def is_valid(self, *args, **kwargs) -> None:
-    #     print('is_valid')
-    #     try:
-    #         super(UserSerializer, self).is_valid(*args, **kwargs)
-    #     except serializers.ValidationError as error:
-    #         print(error)
-    #     raise Exception()
 
-    #     return None
 
+class InviteTokenSerializer(ModelSerializer):
+    user_invited = UserSerializer(many = False)
+    user_inviting = UserSerializer(many = False)
+
+    expired = BooleanField(required = False)
+    time_to_expire = DurationField()
+    class Meta:
+        model = InviteToken
+        exclude:tuple = (
+            "updated_at",
+            "expired_at"
+        )

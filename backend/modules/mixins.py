@@ -9,8 +9,12 @@ class ModelViewSetRedis(ModelViewSet):
     def _serialize_queryset(self, *args, **kwargs):
         queryset:QueryDict = self.get_queryset()
         serializer_class = self.get_serializer()
+
         return self.serializer_class(queryset, *args, **kwargs).data
 
+    def _serialize_instance(self, instance, *args, **kwargs):
+        serializer_class = self.get_serializer()
+        return self.serializer_class(instance, many = False).data
     def list(self, request):
         # get redis obj or None
         datalist = redis.get_list(prefix = self.db_name, json = True)
@@ -43,7 +47,7 @@ class ModelViewSetRedis(ModelViewSet):
             obj:object          = self.get_object()
 
             # parse it into json
-            obj_json:dict               = self._serialize_queryset(many = False)
+            obj_json:dict               = self._serialize_instance(obj)
 
             # set json object into redis db
             redis.set(

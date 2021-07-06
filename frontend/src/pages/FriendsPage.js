@@ -45,8 +45,8 @@ export default function FriendsPage(){
         <>
             <section className="friends-grid">
                 <section className="friends-list">
-                    {friends !== [] ? friends.map(friend => {
-                        return <Friend user={friend} mode="preview" key={friend.id}/>
+                    {friends !== [] ? friends.map((index, friend) => {
+                        return <Friend user={friend} mode="preview" key={index}/>
                     }):""}
                 </section>
                 <h1 className="friends-title">Friends</h1>

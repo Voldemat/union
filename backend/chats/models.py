@@ -6,24 +6,24 @@ from django.conf import settings
 # Create your models here.
 
 class ChatManager(models.Manager):
-    def create_chat(self, *args, **kwargs) -> object:
-        if 'users' in kwargs:
+    def create_chat(self, users:tuple = None, personal:bool = False, *args, **kwargs) -> object:
+        if users:
+            self.users = users
 
-            self.users = kwargs['users']
-
-            print(self.users)
-            if len(self.users) < 2:
-                raise ValueError("Chat should have minimum 2 users")
-
-            del kwargs['users']
+        if personal and len(self.users) < 2:
+            raise ValueError("Chat should have minimum 2 users")
 
         chat = self.create(*args, **kwargs)
 
+        return chat
 
-        if getattr(self, 'users', None):
-            chat.users.add(*self.users)
-            chat.save()
-
+    def get_or_create_chat(self, users = None, *args, **kwargs):
+        if users:
+            try:
+                chat = Chat.objects.get(users__id = users)
+            except Chat.DoesNotExist:
+                pass
+        chat = self.create_chat(*args, **kwargs)
         return chat
 
 
