@@ -31,6 +31,7 @@ function ChatsPage(props){
           }
         })
             .then(response => {
+                console.log(response.data)
                 setChats(state => [...state, ...response.data])
             })
             .catch(error => {
@@ -49,6 +50,7 @@ function ChatsPage(props){
                             Search
                         </div>
                         {chats == null ? '' : chats.map(chat => {
+                            window.chat = chat
                             return <Link className="chatlink" to={`/home/${chat.id}/`} key={chat.id}>{chat.name === '' || chat.name === undefined ? chat.id : chat.name}</Link>
                         })}
                     </section>

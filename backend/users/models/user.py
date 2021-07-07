@@ -152,12 +152,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
     def get_full_name(self) -> str:
-        # save method to concatenation strings and Optional None values
-        # self.first_name:Optional[str] - maybe None
-        # self.last_name:Optional[str] - maybe None
-        first_name:str = self.first_name if self.first_name else ""
-        last_name:str = self.last_name if self.last_name else ""
-        return first_name + " " + last_name
+        # return full user name or email
+        if not self.first_name and not self.last_name:
+            return self.email
+
+        return self.first_name + " " + self.last_name
 
         
     def has_perm(self, perm, obj = None) -> bool:

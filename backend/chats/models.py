@@ -7,14 +7,14 @@ from django.conf import settings
 
 class ChatManager(models.Manager):
     def create_chat(self, users:tuple = None, personal:bool = False, *args, **kwargs) -> object:
-        if users:
-            self.users = users
-
-        if personal and len(self.users) < 2:
+        if personal and len(users) < 2:
             raise ValueError("Chat should have minimum 2 users")
 
         chat = self.create(*args, **kwargs)
 
+        if users:
+            chat.users.add(*users)
+            chat.save()
         return chat
 
     def get_or_create_chat(self, users = None, *args, **kwargs):
